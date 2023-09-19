@@ -1,11 +1,13 @@
+# Vending machine
+
 | CS-665       | Software Design & Patterns |
 | ------------ | -------------------------- |
 | Name         | ALISA BELOUSOVA            |
-| Date         | 09/07/2023                 |
+| Date         | 09/26/2023                 |
 | Course       | Fall                       |
 | Assignment # | 1                          |
 
-# Assignment Overview
+## Assignment Overview
 
 The goal of the project is to develop a fully automated beverage vending machine. Implementation manages brewing process of various coffee and tea beverages, including:
 
@@ -20,31 +22,39 @@ Vending machine should have the capability to add condiments such as milk and su
 
 ## Assumptions
 
-1. Vending machine accepts only electronic payment. Reason: simplicity, cash processing is complicated
-2. Coffee is brewed from capsules or something similar so we don't have to mix different ingridients ourself, only add hot water. Reason: vending machine should be able to consistently produce high-quality beverages that meet the expectations of customers. It's difficult to control quality of coffee made from the fresh ingridients
-3. Can't order multiple items in the same order. Reason: it's rare case that user will decide to make more then couple drinks, simplifies process
-4. Need inventory for both drinks and condiments, everything is counted in items. Reason: it's easier to ensure portions are consistent when individually packaged
-5. Condiments are same for all drinks, condiments quantity can be different based on condiment but not on drink it's used for. Reason: better UX, users learn the limit and can use the knowledge for all drinks, condiments in the requirements (milk and sugar) ) are also universal
-6. There's no admin and servicing functionality such as reset, see statistics, insert more drink and condiment capsules and so on. Reason: there's nothing about admin interface in requirements so seems to be out of scope of the project
-7. Condiments are free. Reason: There's no reason to limit paid condiments
+1. Vending machine accepts only electronic payment.
+2. Coffee is brewed from capsules. Need inventory for both drinks and condiments.
+3. Can't order multiple items in the same order.
+4. Condiments are same for all drinks, condiments quantity can be different based on condiment but not on drink it's used for.
+5. There's no admin and servicing functionality such as reset, statistics, insert more capsules and so on.
+6. Condiments are free.
 
-# GitHub Repository Link:
+## GitHub Repository Link:
 
 https://github.com/alisa007/cs-665-assignment-1
 
-# Implementation Description
+## Implementation Description
 
-For each assignment, please answer the following:
+### **Flexibility:**
 
-- Explain the level of flexibility in your implementation, including how new object types can
-  be easily added or removed in the future.
-- Discuss the simplicity and understandability of your implementation, ensuring that it is
-  easy for others to read and maintain.
-- Describe how you have avoided duplicated code and why it is important.
-- If applicable, mention any design patterns you have used and explain why they were
-  chosen.
+The implementation is designed with flexibility in mind. It uses classes and enumerations to encapsulate different components of the vending machine system. For example, `InventoryItem` is a generic class, and specialized items such as `Drink` and `Condiment` extend it, making it easier to add new types of inventory items in the future by extending `InventoryItem`. The use of a `HashMap` for `drinks` and `condiments` within the `VendingMachine` class allows for dynamic addition and removal of items. New items can be added by simply extending the `InventoryItem` class and adding instances to the respective HashMap. The `VendingMachineState` and `VendingMachineError` enumerations encapsulate the different states and error types, making it straightforward to add or remove states or error types as needed.
 
-## Compile
+### **Simplicity and Understandability:**
+
+The code is structured in a modular fashion, with each class having a specific responsibility, following the Single Responsibility Principle. This makes the codebase easier to understand and maintain. Descriptive variable and method names are used to improve readability and understanding of the code. Javadoc comments are extensively used to provide documentation and context, which aids in understanding the purpose and usage of classes, methods, and attributes.
+
+### **Avoidance of Duplicated Code:**
+
+Duplicated code is minimized by using methods and inheritance. For example, common functionalities and attributes of inventory items are placed in the `InventoryItem` class, and specialized behaviors are implemented in the derived classes. The `remove()` and `isAvailable()` methods in `InventoryItem` are reused by all objects that extend this class, avoiding code duplication.
+
+### **Design Patterns:**
+
+- **State Pattern:** The `VendingMachineState` enumeration and the state attribute in the `VendingMachine` class indicate the use of the State Pattern. This pattern allows the `VendingMachine` object to alter its behavior when its internal state changes, making it appear as if the object changed its class.
+- **Factory Pattern:** While not implemented in the code, the Factory Pattern could be easily added if required to instantiate different types of `InventoryItem` or other objects. This would further decouple the code and make adding new item types even more straightforward.
+
+## Commands
+
+### Compile
 
 Type on the command line:
 
@@ -52,7 +62,7 @@ Type on the command line:
 mvn clean compile
 ```
 
-## JUnit Tests
+### JUnit Tests
 
 To run, use the following command:
 
@@ -60,7 +70,7 @@ To run, use the following command:
 mvn clean test
 ```
 
-## Spotbugs
+### Spotbugs
 
 Use the following command:
 
@@ -68,7 +78,7 @@ Use the following command:
 mvn spotbugs:gui 
 ```
 
-## Checkstyle
+### Checkstyle
 
 The following command will generate a report in HTML format that you can open in a web browser.
 

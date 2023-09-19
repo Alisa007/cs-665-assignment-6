@@ -3,10 +3,11 @@ package edu.bu.met.cs665;
 import static org.junit.Assert.assertEquals;
 import java.util.HashMap;
 import org.junit.Test;
-import edu.bu.met.cs665.example1.Drink;
-import edu.bu.met.cs665.example1.Condiment;
-import edu.bu.met.cs665.example1.VendingMachine;
-import edu.bu.met.cs665.example1.VendingMachineState;
+
+import edu.bu.met.cs665.vm.Condiment;
+import edu.bu.met.cs665.vm.Drink;
+import edu.bu.met.cs665.vm.VendingMachine;
+import edu.bu.met.cs665.vm.VendingMachineState;
 
 public class TestVendingMachine {
     public TestVendingMachine() {}
@@ -21,11 +22,10 @@ public class TestVendingMachine {
         drinks.put("Green Tea", new Drink(44, 150));
         drinks.put("Yellow Tea", new Drink(67, 199));
 
-
         HashMap<String, Condiment> condiments = new HashMap();
 
-        condiments.put("milk", new Condiment(100, 3));
         condiments.put("sugar", new Condiment(sugarCount, 3));
+        condiments.put("milk", new Condiment(100, 3));
 
         return new VendingMachine(drinks, condiments, cupCount);
     }
@@ -100,8 +100,7 @@ public class TestVendingMachine {
         assertEquals(VendingMachineState.ERROR, vendingMachine.state);
 
         vendingMachine.collectDrink();
-  
-        assertEquals(VendingMachineState.ERROR, vendingMachine.state);
+        assertEquals(VendingMachineState.IDLE, vendingMachine.state);
     }
 
     @Test
@@ -131,5 +130,36 @@ public class TestVendingMachine {
         
         vendingMachine.selectDrink("Espresso", currentCondiments);
         assertEquals(VendingMachineState.ERROR, vendingMachine.state);
+    }
+
+    @Test
+    public void testMulticlicksIgnored() {
+        VendingMachine vendingMachine = getVendingMachine(100, 100, 100);
+
+        HashMap<String, Number> currentCondiments = new HashMap();
+
+        currentCondiments.put("sugar", 2);
+        
+        vendingMachine.selectDrink("Espresso", currentCondiments);
+        vendingMachine.payCard();
+        assertEquals(VendingMachineState.WAITING_DRINK_COLLECTION, vendingMachine.state);
+
+        vendingMachine.selectDrink("Espresso", currentCondiments);
+        assertEquals(VendingMachineState.WAITING_DRINK_COLLECTION, vendingMachine.state);
+    }
+
+    @Test
+    public void testCancel() {
+        VendingMachine vendingMachine = getVendingMachine(100, 100, 100);
+
+        HashMap<String, Number> currentCondiments = new HashMap();
+
+        currentCondiments.put("sugar", 2);
+        
+        vendingMachine.selectDrink("Espresso", currentCondiments);
+        assertEquals(VendingMachineState.WAITING_PAYMENT, vendingMachine.state);
+        
+        vendingMachine.cancel();
+        assertEquals(VendingMachineState.IDLE, vendingMachine.state);
     }
 }
