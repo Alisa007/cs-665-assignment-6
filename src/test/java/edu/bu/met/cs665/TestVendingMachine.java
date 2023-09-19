@@ -24,8 +24,8 @@ public class TestVendingMachine {
 
         HashMap<String, Condiment> condiments = new HashMap();
 
-        condiments.put("milk", new Condiment(100, 0, 3));
-        condiments.put("sugar", new Condiment(sugarCount, 0, 3));
+        condiments.put("milk", new Condiment(100, 3));
+        condiments.put("sugar", new Condiment(sugarCount, 3));
 
         return new VendingMachine(drinks, condiments, cupCount);
     }
@@ -101,6 +101,35 @@ public class TestVendingMachine {
 
         vendingMachine.collectDrink();
   
+        assertEquals(VendingMachineState.ERROR, vendingMachine.state);
+    }
+
+    @Test
+    public void testCondimentCapsuleUsage() {
+        VendingMachine vendingMachine = getVendingMachine(100, 3, 100);
+
+        HashMap<String, Number> currentCondiments = new HashMap();
+
+        currentCondiments.put("sugar", 2);
+
+        vendingMachine.selectDrink("Espresso", currentCondiments);
+        vendingMachine.payCard();
+        vendingMachine.collectDrink();
+        assertEquals(VendingMachineState.IDLE, vendingMachine.state);
+        
+        vendingMachine.selectDrink("Espresso", currentCondiments);
+        assertEquals(VendingMachineState.ERROR, vendingMachine.state); 
+    }
+
+    @Test
+    public void testOutOfRangeCondimentDispensionError() {
+        VendingMachine vendingMachine = getVendingMachine(100, 100, 100);
+
+        HashMap<String, Number> currentCondiments = new HashMap();
+
+        currentCondiments.put("sugar", 5);
+        
+        vendingMachine.selectDrink("Espresso", currentCondiments);
         assertEquals(VendingMachineState.ERROR, vendingMachine.state);
     }
 }

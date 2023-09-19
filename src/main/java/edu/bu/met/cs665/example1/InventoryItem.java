@@ -1,22 +1,23 @@
 package edu.bu.met.cs665.example1;
 
 public class InventoryItem {
-  private int count = 0;
+  public int count = 0;
+  public int maxPerOrder = Integer.MAX_VALUE;
 
-  public InventoryItem(int count) {
+  public InventoryItem(int count, int... maxPerOrder) {
     super();
     this.count = count;
-  }
 
-  protected void add(int addCount) {
-    this.count = this.count + addCount;
+    if (maxPerOrder.length > 0) {
+      this.maxPerOrder = maxPerOrder[0]; 
+    }
   }
 
   protected void remove(int removeCount) {
-    this.count = this.count + removeCount;
+    this.count = this.count - removeCount;
   }
 
   protected Boolean isAvailable(int requestedCount) {
-    return requestedCount <= count;
+    return requestedCount <= count && requestedCount <= maxPerOrder;
   }
 }
