@@ -19,6 +19,9 @@ public class VendingMachine {
   private HashMap<String, Condiment> condiments;
   private InventoryItem cups;
 
+  private String currentDrink;
+  private HashMap<String, Number> currentCondiments;
+
   public VendingMachine(HashMap<String, Drink> drinks, HashMap<String, Condiment> condiments, int cupCount) {
     super();
 
@@ -49,15 +52,16 @@ public class VendingMachine {
     Set<String> condimentNames = condiments.keySet();
     
     for (String condimentName : condimentNames) {
-      System.out.println("----------------------------++++++++++++++");
-      // print(condimentName);
       int requestedCondimentCount = condiments.get(condimentName).intValue();
 
-      // if(!this.drinks.get(condimentName).isAvailable(requestedCondimentCount)){
-      //   this.handleError(VendingMachineError.INSUFFICIENT_INVENTORY);
-      // }
+      if(!this.condiments.get(condimentName).isAvailable(requestedCondimentCount)){
+        this.handleError(VendingMachineError.INSUFFICIENT_INVENTORY);
+        return;
+      }
     }
 
+    this.currentDrink = drinkName;
+    this.currentCondiments = condiments;
     this.state = VendingMachineState.WAITING_PAYMENT;
   }
 
@@ -67,6 +71,17 @@ public class VendingMachine {
     }
 
     this.state = VendingMachineState.DISPENSING_DRINK;
+
+    this.drinks.get(currentDrink).remove(1);
+
+    Set<String> condimentNames = this.currentCondiments.keySet();
+    
+    for (String condimentName : condimentNames) {
+      int requestedCondimentCount = this.currentCondiments.get(condimentName).intValue();
+
+      this.condiments.get(condimentName).remove(requestedCondimentCount);
+    }
+
     this.state = VendingMachineState.WAITING_DRINK_COLLECTION;
   }
 

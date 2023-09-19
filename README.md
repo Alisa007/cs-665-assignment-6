@@ -18,8 +18,6 @@ The goal of the project is to develop a fully automated beverage vending machine
 
 Vending machine should have the capability to add condiments such as milk and sugar to the hot beverage. Users should be able to select between 0 and 3 units of either milk or sugar to add to their drink.
 
-
-
 ## Assumptions
 
 1. Vending machine accepts only electronic payment. Reason: simplicity, cash processing is complicated
@@ -27,9 +25,8 @@ Vending machine should have the capability to add condiments such as milk and su
 3. Can't order multiple items in the same order. Reason: it's rare case that user will decide to make more then couple drinks, simplifies process
 4. Need inventory for both drinks and condiments, everything is counted in items. Reason: it's easier to ensure portions are consistent when individually packaged
 5. Condiments are same for all drinks, condiments quantity can be different based on condiment but not on drink it's used for. Reason: better UX, users learn the limit and can use the knowledge for all drinks, condiments in the requirements (milk and sugar) ) are also universal
-6. There's no admin functionality such as reset, see statistics, insert more drink capsules and so on. Reason: there's nothing about admin interface in requirements so seems to be out of scope of the project
+6. There's no admin and servicing functionality such as reset, see statistics, insert more drink and condiment capsules and so on. Reason: there's nothing about admin interface in requirements so seems to be out of scope of the project
 7. Condiments are free. Reason: There's no reason to limit paid condiments
-
 
 # GitHub Repository Link:
 
