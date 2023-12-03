@@ -1,15 +1,15 @@
 /**
  * Name: Alisa Belousova
  * Course: CS-665 Software Designs & Patterns
- * Date: 09/26/2023
+ * Date: 12/5/2023
  * File Name: VendingMachine.java
  * Description: This file holds the VendingMachine class, that integrates and 
  * manages the operations of the vending machine, 
  * interacting with other classes such as Drink, Condiment, and InventoryItem. 
- * It maintains the state of the vending machine, the inventory of drinks and condiments, 
+ * It maintains the state of the vending machine, the inventory of items and addons, 
  * and the availability of cups.
- * The VendingMachine class provides functionalities to select a drink with desired 
- * condiments, process payment through a card, handle errors, and manage the operational 
+ * The VendingMachine class provides functionalities to select a item with desired 
+ * addons, process payment through a card, handle errors, and manage the operational 
  * progress of the machine.
  * The class also manages the inventory by updating the count of items 
  * upon successful transactions. The class employs a state-based approach using the 
@@ -20,8 +20,6 @@
 
 package edu.bu.met.cs665.vm;
 
-import edu.bu.met.cs665.vm.Condiment;
-import edu.bu.met.cs665.vm.Drink;
 import edu.bu.met.cs665.vm.InventoryItem;
 import edu.bu.met.cs665.vm.VendingMachineError;
 import edu.bu.met.cs665.vm.VendingMachineState;
@@ -30,28 +28,28 @@ import java.util.Set;
 
 public class VendingMachine {
   public VendingMachineState state = VendingMachineState.IDLE;
-  private HashMap<String, Drink> drinks;
-  private HashMap<String, Condiment> condiments;
+  private HashMap<String, InventoryItem> items;
+  private HashMap<String, InventoryItem> addons;
   private InventoryItem cups;
 
-  private String currentDrink;
-  private HashMap<String, Number> currentCondiments;
+  private String currentItem;
+  private HashMap<String, Number> currentAddons;
 
   /**
-   * Constructor for VendingMachine class initializing the drinks, condiments and cups.
-   * @param drinks HashMap containing the drinks available in the vending machine.
-   * @param condiments HashMap containing the condiments available in the vending machine.
+   * Constructor for VendingMachine class initializing the items, addons and cups.
+   * @param items HashMap containing the items available in the vending machine.
+   * @param addons HashMap containing the addons available in the vending machine.
    * @param cupsCount The number of cups available in the vending machine.
    */
   public VendingMachine(
-      HashMap<String, Drink> drinks, 
-      HashMap<String, Condiment> condiments, 
+      HashMap<String, InventoryItem> items, 
+      HashMap<String, InventoryItem> addons, 
       int cupsCount
   ) {
     super();
 
-    this.drinks = drinks;
-    this.condiments = condiments;
+    this.items = items;
+    this.addons = addons;
     this.cups = new InventoryItem(cupsCount);
   }
 
@@ -76,73 +74,73 @@ public class VendingMachine {
   }
 
   /**
-   * Resets the current drink, current condiments and sets the state to IDLE.
+   * Resets the current item, current addons and sets the state to IDLE.
    */
   private void reset() {
-    this.currentDrink = null;
-    this.currentCondiments = null;
+    this.currentItem = null;
+    this.currentAddons = null;
     this.state = VendingMachineState.IDLE;
   }
 
   /**
-   * Selects a drink and sets the state to WAITING_PAYMENT if the item is available.
+   * Selects a item and sets the state to WAITING_PAYMENT if the item is available.
    * Handles insufficient inventory error if the item is unavailable.
-   * @param drinkName The name of the drink to be selected.
-   * @param condiments The condiments chosen for the drink.
+   * @param itemName The name of the item to be selected.
+   * @param addons The addons chosen for the item.
    */
-  public void selectDrink(String drinkName, HashMap<String, Number> condiments) {
+  public void selectItem(String itemName, HashMap<String, Number> addons) {
     if (this.state != VendingMachineState.IDLE) {
       return;
     }
 
-    if (!this.cups.isAvailable(1) || !this.drinks.get(drinkName).isAvailable(1)) {
+    if (!this.cups.isAvailable(1) || !this.items.get(itemName).isAvailable(1)) {
       this.handleError(VendingMachineError.INSUFFICIENT_INVENTORY);
       return;
     }
    
-    Set<String> condimentNames = condiments.keySet();
+    Set<String> addonNames = addons.keySet();
     
-    for (String condimentName : condimentNames) {
-      int requestedCondimentCount = condiments.get(condimentName).intValue();
+    for (String addonName : addonNames) {
+      int requestedAddonCount = addons.get(addonName).intValue();
 
-      if (!this.condiments.get(condimentName).isAvailable(requestedCondimentCount)) {
+      if (!this.addons.get(addonName).isAvailable(requestedAddonCount)) {
         this.handleError(VendingMachineError.INSUFFICIENT_INVENTORY);
         return;
       }
     }
 
-    this.currentDrink = drinkName;
-    this.currentCondiments = condiments;
+    this.currentItem = itemName;
+    this.currentAddons = addons;
     this.state = VendingMachineState.WAITING_PAYMENT;
   }
 
   /**
-   * Processes payment, updates inventory, and sets the state to DISPENSING_DRINK.
+   * Processes payment, updates inventory, and sets the state to DISPENSING_ITEM.
    */
   public void payCard() {
     if (this.state != VendingMachineState.WAITING_PAYMENT) {
       return;
     }
 
-    this.waitingForOperationProgress(VendingMachineState.DISPENSING_DRINK);
+    this.waitingForOperationProgress(VendingMachineState.DISPENSING_ITEM);
 
-    this.drinks.get(currentDrink).remove(1);
+    this.items.get(currentItem).remove(1);
 
-    Set<String> condimentNames = this.currentCondiments.keySet();
+    Set<String> addonNames = this.currentAddons.keySet();
     
-    for (String condimentName : condimentNames) {
-      int requestedCondimentCount = this.currentCondiments.get(condimentName).intValue();
+    for (String addonName : addonNames) {
+      int requestedAddonCount = this.currentAddons.get(addonName).intValue();
 
-      this.condiments.get(condimentName).remove(requestedCondimentCount);
+      this.addons.get(addonName).remove(requestedAddonCount);
     }
 
-    this.state = VendingMachineState.WAITING_DRINK_COLLECTION;
+    this.state = VendingMachineState.WAITING_ITEM_COLLECTION;
   }
 
   /**
-   * Resets the vending machine after the drink has been collected.
+   * Resets the vending machine after the item has been collected.
    */
-  public void collectDrink() {
+  public void collectItem() {
     this.reset();
   }
 

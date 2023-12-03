@@ -1,7 +1,7 @@
 /**
  * Name: Alisa Belousova
  * Course: CS-665 Software Designs & Patterns
- * Date: 09/26/2023
+ * Date: 12/5/2023
  * File Name: InventoryItem.java
  * Description: This file contains the definition for the InventoryItem class. 
  * The InventoryItem class represents a generic item within the inventory 
@@ -17,8 +17,18 @@
 package edu.bu.met.cs665.vm;
 
 public class InventoryItem {
-  public int count = 0;
-  public int maxPerOrder = Integer.MAX_VALUE;
+  private int count = 0;
+  private int maxPerOrder = Integer.MAX_VALUE;
+
+  /**
+   * Constructor for the InventoryItem class initializing the count and, optionally, 
+   * the maximum quantity per order.
+   * @param count The initial quantity of the item available in the vending machine.
+   */
+  public InventoryItem(int count) {
+    super();
+    this.count = count;
+  }
 
   /**
    * Constructor for the InventoryItem class initializing the count and, optionally, 
@@ -26,13 +36,10 @@ public class InventoryItem {
    * @param count The initial quantity of the item available in the vending machine.
    * @param maxPerOrder Optional parameter indicating the maximum quantity of the item.
    */
-  public InventoryItem(int count, int... maxPerOrder) {
+  public InventoryItem(int count, int maxPerOrder) {
     super();
     this.count = count;
-
-    if (maxPerOrder.length > 0) {
-      this.maxPerOrder = maxPerOrder[0]; 
-    }
+    this.maxPerOrder = maxPerOrder;
   }
 
   /**

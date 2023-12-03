@@ -1,7 +1,7 @@
 /**
  * Name: Alisa Belousova
  * Course: CS-665 Software Designs & Patterns
- * Date: 09/26/2023
+ * Date: 12/5/2023
  * File Name: VendingMachineState.java
  * Description: The VendingMachineState enum represents the different operational 
  * states that a vending machine can be in throughout its transaction cycle. 
@@ -10,9 +10,9 @@
  * is ready for a new transaction.
  * - WAITING_PAYMENT: The state after a user has selected a drink 
  * and the machine is awaiting payment.
- * - DISPENSING_DRINK: The state when the machine is in the process 
+ * - DISPENSING_ITEM: The state when the machine is in the process 
  * of dispensing the selected drink after receiving payment.
- * - WAITING_DRINK_COLLECTION: The state in which the machine waits 
+ * - WAITING_ITEM_COLLECTION: The state in which the machine waits 
  * for the user to collect the dispensed drink.
  * - REFUNDING_PAYMENT: The state during which the machine is 
  * refunding the payment, usually due to a cancellation or error.
@@ -25,8 +25,8 @@ package edu.bu.met.cs665.vm;
 public enum VendingMachineState {
   IDLE,
   WAITING_PAYMENT,
-  DISPENSING_DRINK,
-  WAITING_DRINK_COLLECTION,
+  DISPENSING_ITEM,
+  WAITING_ITEM_COLLECTION,
   REFUNDING_PAYMENT,
   ERROR,
 }

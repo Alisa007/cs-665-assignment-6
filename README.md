@@ -3,9 +3,27 @@
 | CS-665       | Software Design & Patterns |
 | ------------ | -------------------------- |
 | Name         | ALISA BELOUSOVA            |
-| Date         | 09/26/2023                 |
+| Date         | 12/5/2023                  |
 | Course       | Fall                       |
-| Assignment # | 1                          |
+| Assignment # | 6 (based on 1)             |
+
+## UPDATE: Refactoring
+
+### **1. Divergent Change**
+
+The original code required changes in multiple places (like separate handling for `Drink` and `Condiment`) when modifying inventory-related behavior. Using a unified approach with `InventoryItem`, I've made the system more cohesive, addressing the divergent change smell. Now, changes in inventory behavior can be managed more centrally.
+
+### **2. Inappropriate Intimacy**
+
+The `VendingMachine` was closely tied to specific classes (`Drink` and `Condiment`), creating a high degree of coupling. By abstracting these into a general `InventoryItem`, I've reduced the coupling, addressing the inappropriate intimacy smell.
+
+### 3. Limited Use of Encapsulation
+
+Fields like `count` and maxPerOrder in `InventoryItem` were public, which broke encapsulation. I've made fields private.
+
+### 4. Varargs in Constructor
+
+Usage of varargs for `maxPerOrder` in the `InventoryItem` constructor was confusing (source: https://rules.sonarsource.com/java/RSPEC-5669/). Provided overloaded constructors for different initializations.
 
 ## Assignment Overview
 

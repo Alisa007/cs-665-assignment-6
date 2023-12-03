@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import edu.bu.met.cs665.vm.Condiment;
 import edu.bu.met.cs665.vm.Drink;
+import edu.bu.met.cs665.vm.InventoryItem;
 import edu.bu.met.cs665.vm.VendingMachine;
 import edu.bu.met.cs665.vm.VendingMachineState;
 
@@ -13,7 +14,7 @@ public class TestVendingMachine {
     public TestVendingMachine() {}
 
     private VendingMachine getVendingMachine(int espressoCount, int sugarCount, int cupCount) {
-        HashMap<String, Drink> drinks = new HashMap();
+        HashMap<String, InventoryItem> drinks = new HashMap();
 
         drinks.put("Espresso", new Drink(espressoCount, 198));
         drinks.put("Americano", new Drink(44, 199));
@@ -22,7 +23,7 @@ public class TestVendingMachine {
         drinks.put("Green Tea", new Drink(44, 150));
         drinks.put("Yellow Tea", new Drink(67, 199));
 
-        HashMap<String, Condiment> condiments = new HashMap();
+        HashMap<String, InventoryItem> condiments = new HashMap();
 
         condiments.put("sugar", new Condiment(sugarCount, 3));
         condiments.put("milk", new Condiment(100, 3));
@@ -38,13 +39,13 @@ public class TestVendingMachine {
 
         currentCondiments.put("sugar", 2);
         
-        vendingMachine.selectDrink("Espresso", currentCondiments);
+        vendingMachine.selectItem("Espresso", currentCondiments);
         assertEquals(VendingMachineState.WAITING_PAYMENT, vendingMachine.state);
         
         vendingMachine.payCard();
-        assertEquals(VendingMachineState.WAITING_DRINK_COLLECTION, vendingMachine.state);
+        assertEquals(VendingMachineState.WAITING_ITEM_COLLECTION, vendingMachine.state);
 
-        vendingMachine.collectDrink();
+        vendingMachine.collectItem();
   
         assertEquals(VendingMachineState.IDLE, vendingMachine.state);
     }
@@ -57,7 +58,7 @@ public class TestVendingMachine {
 
         currentCondiments.put("sugar", 2);
         
-        vendingMachine.selectDrink("Espresso", currentCondiments);
+        vendingMachine.selectItem("Espresso", currentCondiments);
         assertEquals(VendingMachineState.ERROR, vendingMachine.state);
     }
 
@@ -69,7 +70,7 @@ public class TestVendingMachine {
 
         currentCondiments.put("sugar", 2);
         
-        vendingMachine.selectDrink("Espresso", currentCondiments);
+        vendingMachine.selectItem("Espresso", currentCondiments);
         assertEquals(VendingMachineState.ERROR, vendingMachine.state);
     }
 
@@ -81,7 +82,7 @@ public class TestVendingMachine {
 
         currentCondiments.put("sugar", 2);
         
-        vendingMachine.selectDrink("Espresso", currentCondiments);
+        vendingMachine.selectItem("Espresso", currentCondiments);
         assertEquals(VendingMachineState.ERROR, vendingMachine.state);
     }
 
@@ -93,13 +94,13 @@ public class TestVendingMachine {
 
         currentCondiments.put("sugar", 2);
         
-        vendingMachine.selectDrink("Espresso", currentCondiments);
+        vendingMachine.selectItem("Espresso", currentCondiments);
         assertEquals(VendingMachineState.ERROR, vendingMachine.state);
         
         vendingMachine.payCard();
         assertEquals(VendingMachineState.ERROR, vendingMachine.state);
 
-        vendingMachine.collectDrink();
+        vendingMachine.collectItem();
         assertEquals(VendingMachineState.IDLE, vendingMachine.state);
     }
 
@@ -111,12 +112,12 @@ public class TestVendingMachine {
 
         currentCondiments.put("sugar", 2);
 
-        vendingMachine.selectDrink("Espresso", currentCondiments);
+        vendingMachine.selectItem("Espresso", currentCondiments);
         vendingMachine.payCard();
-        vendingMachine.collectDrink();
+        vendingMachine.collectItem();
         assertEquals(VendingMachineState.IDLE, vendingMachine.state);
         
-        vendingMachine.selectDrink("Espresso", currentCondiments);
+        vendingMachine.selectItem("Espresso", currentCondiments);
         assertEquals(VendingMachineState.ERROR, vendingMachine.state); 
     }
 
@@ -128,7 +129,7 @@ public class TestVendingMachine {
 
         currentCondiments.put("sugar", 5);
         
-        vendingMachine.selectDrink("Espresso", currentCondiments);
+        vendingMachine.selectItem("Espresso", currentCondiments);
         assertEquals(VendingMachineState.ERROR, vendingMachine.state);
     }
 
@@ -140,12 +141,12 @@ public class TestVendingMachine {
 
         currentCondiments.put("sugar", 2);
         
-        vendingMachine.selectDrink("Espresso", currentCondiments);
+        vendingMachine.selectItem("Espresso", currentCondiments);
         vendingMachine.payCard();
-        assertEquals(VendingMachineState.WAITING_DRINK_COLLECTION, vendingMachine.state);
+        assertEquals(VendingMachineState.WAITING_ITEM_COLLECTION, vendingMachine.state);
 
-        vendingMachine.selectDrink("Espresso", currentCondiments);
-        assertEquals(VendingMachineState.WAITING_DRINK_COLLECTION, vendingMachine.state);
+        vendingMachine.selectItem("Espresso", currentCondiments);
+        assertEquals(VendingMachineState.WAITING_ITEM_COLLECTION, vendingMachine.state);
     }
 
     @Test
@@ -156,7 +157,7 @@ public class TestVendingMachine {
 
         currentCondiments.put("sugar", 2);
         
-        vendingMachine.selectDrink("Espresso", currentCondiments);
+        vendingMachine.selectItem("Espresso", currentCondiments);
         assertEquals(VendingMachineState.WAITING_PAYMENT, vendingMachine.state);
         
         vendingMachine.cancel();
